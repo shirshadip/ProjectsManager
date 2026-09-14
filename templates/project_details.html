@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ project.get('project_name', 'Project') }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <p class="breadcrumb"><a href="{{ url_for('projects_list') }}">Projects</a> / {{ project.get('project_name', '') }}</p>
+        <h1 class="page-title">{{ project.get('project_name', '') }}</h1>
+        <p class="page-subtitle">for {{ project.get('client_name', '') }}</p>
+    </div>
+    <div class="action-group">
+        <a href="{{ url_for('edit_project', project_id=project.id) }}" class="btn btn-ghost">Edit</a>
+        {% if project.get('is_completed') %}
+        <a href="{{ url_for('invoice', project_id=project.id) }}" class="btn btn-accent">Generate Invoice</a>
+        {% endif %}
+        <form method="POST" action="{{ url_for('delete_project', project_id=project.id) }}" class="delete-form">
+            <button type="submit" class="btn btn-danger-ghost">Delete</button>
+        </form>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <section class="panel">
+        <div class="panel-header"><h2 class="panel-title">Project information</h2></div>
+        <dl class="detail-list">
+            <div class="detail-row">
+                <dt>Client name</dt>
+                <dd>{{ project.get('client_name', '') }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Project name</dt>
+                <dd>{{ project.get('project_name', '') }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Project status</dt>
+                <dd><span class="status-badge status-{{ project.get('project_status', '') | slugify }}">{{ project.get('project_status', '') }}</span></dd>
+            </div>
+            <div class="detail-row">
+                <dt>Completion status</dt>
+                <dd>
+                    {% if project.get('is_completed') %}
+                    <span class="check-yes">&#10003; Completed</span>
+                    {% else %}
+                    <span class="check-no">Not completed yet</span>
+                    {% endif %}
+                </dd>
+            </div>
+            <div class="detail-row">
+                <dt>Created</dt>
+                <dd>{{ project.get('created_at', '')[:10] if project.get('created_at') else 'Not available' }}</dd>
+            </div>
+        </dl>
+    </section>
+
+    <section class="panel">
+        <div class="panel-header"><h2 class="panel-title">Payment</h2></div>
+        <dl class="detail-list">
+            <div class="detail-row">
+                <dt>Project amount</dt>
+                <dd class="mono">{{ payment.project_amount | inr }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Paid amount</dt>
+                <dd class="mono">{{ payment.paid_amount | inr }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Remaining amount</dt>
+                <dd class="mono">{{ payment.remaining_amount | inr }}</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Payment status</dt>
+                <dd><span class="payment-badge payment-{{ payment.status }}">{{ payment.label }}</span></dd>
+            </div>
+            <div class="detail-row">
+                <dt>Payment method</dt>
+                <dd>{{ project.get('paid_via', '') }}</dd>
+            </div>
+        </dl>
+
+        {% if not project.get('is_completed') %}
+        <p class="notice-inline">Invoice available after project completion.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

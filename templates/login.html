@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+
+{% block auth_content %}
+<div class="auth-wrap">
+    <form class="auth-card" method="POST" action="{{ url_for('login') }}" novalidate>
+        <div class="auth-brand">
+            <span class="auth-brand-mark">{{ business_name[:1] }}</span>
+        </div>
+        <h1 class="auth-title">{{ business_name }}</h1>
+        <p class="auth-subtitle">Sign in to manage your projects and invoices.</p>
+
+        <input type="hidden" name="next" value="{{ next_url }}">
+
+        <label class="field-label" for="username">Username</label>
+        <input class="field-input" type="text" id="username" name="username" autocomplete="username" required autofocus>
+
+        <label class="field-label" for="password">Password</label>
+        <input class="field-input" type="password" id="password" name="password" autocomplete="current-password" required>
+
+        <button type="submit" class="btn btn-primary btn-block">Log in</button>
+
+        <p class="auth-note">This is a private dashboard. There's no public sign-up.</p>
+    </form>
+</div>
+{% endblock %}

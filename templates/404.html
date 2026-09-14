@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="error-page">
+    <p class="error-code">404</p>
+    <h1>This page doesn't exist</h1>
+    <p>The link may be broken, or the project may have been deleted.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to dashboard</a>
+</div>
+</body>
+</html>

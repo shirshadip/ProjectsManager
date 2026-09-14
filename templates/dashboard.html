@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">A snapshot of every project you're running right now.</p>
+    </div>
+    <a href="{{ url_for('add_project') }}" class="btn btn-primary">+ Add Project</a>
+</div>
+
+<section class="stat-grid">
+    <div class="stat-card">
+        <span class="stat-label">Total projects</span>
+        <span class="stat-value">{{ total_projects }}</span>
+    </div>
+    <div class="stat-card stat-card-success">
+        <span class="stat-label">Completed</span>
+        <span class="stat-value">{{ completed_projects }}</span>
+    </div>
+    <div class="stat-card stat-card-warning">
+        <span class="stat-label">Pending</span>
+        <span class="stat-value">{{ pending_projects }}</span>
+    </div>
+    <div class="stat-card stat-card-accent">
+        <span class="stat-label">Total revenue collected</span>
+        <span class="stat-value stat-value-mono">{{ total_revenue | inr }}</span>
+    </div>
+    <div class="stat-card stat-card-danger">
+        <span class="stat-label">Outstanding amount</span>
+        <span class="stat-value stat-value-mono">{{ total_unpaid | inr }}</span>
+    </div>
+</section>
+
+<section class="panel">
+    <div class="panel-header">
+        <h2 class="panel-title">Recent projects</h2>
+        {% if recent_projects %}
+        <a href="{{ url_for('projects_list') }}" class="link">View all projects</a>
+        {% endif %}
+    </div>
+
+    {% if recent_projects %}
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Client</th>
+                    <th>Project</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Payment</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in recent_projects %}
+                {% set pay = payment_breakdown(project) %}
+                <tr>
+                    <td data-label="Client">{{ project.client_name }}</td>
+                    <td data-label="Project">{{ project.project_name }}</td>
+                    <td data-label="Amount" class="mono">{{ pay.project_amount | inr }}</td>
+                    <td data-label="Status"><span class="status-badge status-{{ project.project_status | slugify }}">{{ project.project_status }}</span></td>
+                    <td data-label="Payment"><span class="payment-badge payment-{{ pay.status }}">{{ pay.label }}</span></td>
+                    <td data-label="Actions" class="col-actions">
+                        <a href="{{ url_for('project_details', project_id=project.id) }}" class="btn btn-sm btn-ghost">View</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M8 14a3 3 0 0 1 3-3h8l3 4h15a3 3 0 0 1 3 3v16a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3V14Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>No projects yet</h3>
+        <p>Add your first project to start tracking payments and generating invoices.</p>
+        <a href="{{ url_for('add_project') }}" class="btn btn-primary">+ Add your first project</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

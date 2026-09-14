@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Add Project{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Add project</h1>
+        <p class="page-subtitle">Track a new client engagement from the start.</p>
+    </div>
+</div>
+
+<section class="panel panel-form">
+    <form method="POST" action="{{ url_for('add_project') }}" novalidate>
+        <div class="form-grid">
+            <div class="field">
+                <label class="field-label" for="client_name">Client name</label>
+                <input class="field-input" type="text" id="client_name" name="client_name" value="{{ form.get('client_name', '') }}" required>
+            </div>
+            <div class="field">
+                <label class="field-label" for="project_name">Project name</label>
+                <input class="field-input" type="text" id="project_name" name="project_name" value="{{ form.get('project_name', '') }}" required>
+            </div>
+
+            <div class="field">
+                <label class="field-label" for="project_amount">Project amount (&#8377;)</label>
+                <input class="field-input" type="number" step="0.01" min="0" id="project_amount" name="project_amount" value="{{ form.get('project_amount', '') }}" required>
+            </div>
+            <div class="field">
+                <label class="field-label" for="paid_amount">Paid amount so far (&#8377;)</label>
+                <input class="field-input" type="number" step="0.01" min="0" id="paid_amount" name="paid_amount" value="{{ form.get('paid_amount', 0) }}" required>
+            </div>
+
+            <div class="field">
+                <label class="field-label" for="project_status">Project status</label>
+                <select class="field-select" id="project_status" name="project_status" required>
+                    {% for status in statuses %}
+                    <option value="{{ status }}" {% if form.get('project_status') == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="field">
+                <label class="field-label" for="paid_via">Paid via</label>
+                <select class="field-select" id="paid_via" name="paid_via" required>
+                    {% for method in payment_methods %}
+                    <option value="{{ method }}" {% if form.get('paid_via', 'Not Paid') == method %}selected{% endif %}>{{ method }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field field-checkbox">
+                <label class="checkbox-label">
+                    <input type="checkbox" name="is_completed" {% if form.get('is_completed') == 'on' %}checked{% endif %}>
+                    <span>Project completed</span>
+                </label>
+                <p class="field-hint">You can only generate an invoice once this is checked.</p>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a href="{{ url_for('projects_list') }}" class="btn btn-ghost">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save project</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

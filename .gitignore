@@ -1,0 +1,17 @@
+# Environment / secrets
+.env
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+
+# Generated invoices (contain client financial data - keep out of Git)
+invoices/*.pdf
+
+# OS / editor cruft
+.DS_Store
+.vscode/
+.idea/
