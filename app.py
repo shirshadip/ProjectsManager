@@ -902,6 +902,5 @@ def server_error(e):
 # =============================================================================
 
 if __name__ == "__main__":
-    # debug=True is convenient for local development. Turn it off if you
-    # ever expose this app beyond your own machine.
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
