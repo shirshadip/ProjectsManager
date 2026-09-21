@@ -619,7 +619,7 @@ def build_invoice_pdf(project, invoice_number):
         ]))
         story.append(upi_table)
     else:
-        story.append(Paragraph("This invoice has been paid in full. Thank you!", styles["paid_note"]))
+        story.append(Paragraph("Your project has been paid in full. Thank you!", styles["paid_note"]))
     story.append(Spacer(1, 9 * mm))
 
     # --- Support -----------------------------------------------------------
@@ -634,7 +634,7 @@ def build_invoice_pdf(project, invoice_number):
     story.append(Spacer(1, 10 * mm))
 
     story.append(HRFlowable(width="100%", thickness=0.8, color=PDF_COLORS["border"], spaceAfter=6 * mm))
-    story.append(Paragraph("Thank you for your business.", styles["footer"]))
+    story.append(Paragraph("Think , Build and publish with us - Thank You", styles["footer"]))
     story.append(Paragraph(BUSINESS_NAME, styles["footer_muted"]))
 
     doc.build(story)
